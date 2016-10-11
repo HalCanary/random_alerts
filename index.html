@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Random Countdown</title>
+<style>
+</style>
+<script>
+var countdownMinutes = 1;
+var interruptionCount = 5;
+var ratio = 3;
+
+var countdown = countdownMinutes * 60 * 1000;
+var stops = new Array(interruptionCount);
+var total = 0;
+for (var i = 0; i < stops.length; i++) { 
+    total += 1 + ratio * Math.random();
+    stops[i] = total;
+}
+scale = (countdownMinutes * 60) / (total + 1 + ratio * Math.random());
+for (var i = 0; i < stops.length; i++) { 
+    stops[i] = stops[i] * scale;
+}                    
+var start = new Date().getTime();
+var index = 0;
+intensity = 255;
+var sound = document.createElement("audio");
+sound.src = "complete.oga";
+function d() {
+  x = Math.floor((countdown + start - new Date().getTime()) / 1000);
+  intensity = (intensity == 255) ? 255 : (intensity + 4);
+  if (x < 0) {
+      document.body.style.backgroundColor = rgb(255,255-intensity,255-intensity);
+      return;
+  }
+  var min = Math.floor(x / 60);
+  var sec = x % 60;
+  document.getElementById("p").innerHTML = min + (sec < 10 ? ":0" + sec : min + ":" + sec);
+  if (index < interruptionCount && (countdownMinutes * 60 - x) > stops[index]) {
+    index += 1;
+    intensity = 0;
+    sound.play();
+    }
+  document.body.style.backgroundColor = "rgb(255," + intensity + "," + intensity + ")";
+}
+window.setInterval(d, 50);
+</script>
+</head>
+<body>
+<p id="p"></p>
+</body>
+</html>
